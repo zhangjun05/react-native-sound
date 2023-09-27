@@ -206,12 +206,14 @@ RCT_EXPORT_METHOD(prepare
         player = [[AVAudioPlayer alloc] initWithData:data error:&error];
     } else if ([fileNameEscaped hasPrefix:@"ipod-library://"]) {
         fileNameUrl = [NSURL URLWithString:fileNameEscaped];
-        player = [[AVAudioPlayer alloc] initWithContentsOfURL:fileNameUrl
-                                                        error:&error];
+//        player = [[AVAudioPlayer alloc] initWithContentsOfURL:fileNameUrl
+//                                                        error:&error];
+        player = [[AVAudioPlayer alloc] initWithData:[NSData dataWithContentsOfFile:fileNameUrl] error:&error];
     } else {
         fileNameUrl = [NSURL URLWithString:fileNameEscaped];
-        player = [[AVAudioPlayer alloc] initWithContentsOfURL:fileNameUrl
-                                                        error:&error];
+//        player = [[AVAudioPlayer alloc] initWithContentsOfURL:fileNameUrl
+//                                                        error:&error];
+        player = [[AVAudioPlayer alloc] initWithData:[NSData dataWithContentsOfFile:fileNameUrl] error:&error];
     }
 
     if (player) {
