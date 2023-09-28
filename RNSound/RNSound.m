@@ -205,17 +205,28 @@ RCT_EXPORT_METHOD(prepare
         NSData *data = [NSData dataWithContentsOfURL:fileNameUrl];
         player = [[AVAudioPlayer alloc] initWithData:data error:&error];
     } else if ([fileNameEscaped hasPrefix:@"ipod-library://"]) {
-        fileNameUrl = [NSURL URLWithString:fileNameEscaped];
-//        player = [[AVAudioPlayer alloc] initWithContentsOfURL:fileNameUrl
-//                                                        error:&error];
-        player = [[AVAudioPlayer alloc] initWithData:[NSData dataWithContentsOfFile:fileNameUrl] error:&error];
-    } else {
-        fileNameUrl = [NSURL URLWithString:fileNameEscaped];
-//        player = [[AVAudioPlayer alloc] initWithContentsOfURL:fileNameUrl
-//                                                        error:&error];
-        player = [[AVAudioPlayer alloc] initWithData:[NSData dataWithContentsOfFile:fileNameEscaped] error:&error];
-    }
+        //        fileNameUrl = [NSURL fileURLWithPath:fileNameEscaped];
+        //        player = [[AVAudioPlayer alloc] initWithContentsOfURL:fileNameUrl
+        //                                                        error:&error];
+                NSError *playerError = nil;
+                player = [[AVAudioPlayer alloc] initWithData:[NSData dataWithContentsOfFile:fileNameEscaped] error:&playerError];
+                if (playerError && playerError.code ==1954115647) {
+                    player = [[AVAudioPlayer alloc] initWithData:[NSData dataWithContentsOfFile:fileNameEscaped] fileTypeHint:AVFileTypeMPEGLayer3 error:&playerError];
 
+                   }
+              
+            } else {
+        //        fileNameUrl = [NSURL fileURLWithPath:fileNameEscaped];
+        //        player = [[AVAudioPlayer alloc] initWithContentsOfURL:fileNameUrl
+        //                                                        error:&error];
+                NSError *playerError = nil;
+                player = [[AVAudioPlayer alloc] initWithData:[NSData dataWithContentsOfFile:fileNameEscaped] error:&playerError];
+                if (playerError && playerError.code ==1954115647) {
+                    player = [[AVAudioPlayer alloc] initWithData:[NSData dataWithContentsOfFile:fileNameEscaped] fileTypeHint:AVFileTypeMPEGLayer3 error:&playerError];
+
+                   }
+              
+            }
     if (player) {
         @synchronized(self) {
             player.delegate = self;
